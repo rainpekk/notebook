@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我的笔记分类</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+      background-color: hsl(210, 40%, 98%);
+      margin: 0;
+      padding: 0;
+      color: #111827;
+    }
+    header {
+      background: #2563eb;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+    .category-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
+    .category-item {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 40px 20px;
+      text-align: center;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .category-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      background: #f1f5ff;
+    }
+    .category-item h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    footer {
+      text-align: center;
+      margin: 30px;
+      color: #6b7280;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>我的笔记</header>
+
+  <main>
+    <div class="category-list" id="categoryList"></div>
+  </main>
+
+  <footer>
+    © 2025 My GitHub Pages |
+    <a href="https://github.com/rainpekk/notes" target="_blank">GitHub 仓库</a>
+  </footer>
+
+  <script>
+    // ✅ 分类配置
+    const categories = [
+      { name: "课堂笔记", id: "class", password: null },
+      { name: "家教笔记", id: "tutoring", password: "abc123" },
+      { name: "杂感", id: "misc", password: null }
+    ];
+
+    const container = document.getElementById("categoryList");
+
+    // ✅ 渲染分类卡片
+    categories.forEach(cat => {
+      const div = document.createElement("div");
+      div.className = "category-item";
+      div.innerHTML = `<h2>${cat.name}</h2>`;
+      div.onclick = () => {
+        if (cat.password) {
+          const input = prompt(`请输入 "${cat.name}" 的访问密码：`);
+          if (input === cat.password) {
+            localStorage.setItem(`access_${cat.id}`, "true");
+            location.href = `category.html?id=${cat.id}&name=${encodeURIComponent(cat.name)}`;
+          } else {
+            alert("密码错误 ❌");
+          }
+        } else {
+          location.href = `category.html?id=${cat.id}&name=${encodeURIComponent(cat.name)}`;
+        }
+      };
+      container.appendChild(div);
+    });
+  </script>
+</body>
+</html>
